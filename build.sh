@@ -10,6 +10,10 @@ if ! is_windows; then
   import ninja from python3
 fi
 
+# MSYS2 must not rewrite MSVC flags like /MT, /O2, /MACHINE:X86 into POSIX paths.
+export MSYS2_ARG_CONV_EXCL="*"
+export MSYS_NO_PATHCONV=1
+
 windows_args="/O2 /Ob1 /Oy- /Zi /FS /GF /GS /Gy /DNDEBUG /fp:precise /Zc:wchar_t /Zc:forScope /D_VARIADIC_MAX=10"
 windows_x86_args="/O2 /Ob1 /Oy- /Zi /FS /GF /GS /Gy /DNDEBUG /fp:precise /Zc:wchar_t /Zc:forScope /D_VARIADIC_MAX=10 /arch:IA32"
 

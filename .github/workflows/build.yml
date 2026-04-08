@@ -15,6 +15,7 @@ jobs:
   build:
     runs-on: ${{ matrix.platform.host }}
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - name: windows-x86
@@ -57,6 +58,8 @@ jobs:
           bash build.sh
         env:
           OPENH264_WINDOWS_ARCH: ${{ matrix.platform.target_arch }}
+          MSYS2_ARG_CONV_EXCL: "*"
+          MSYS_NO_PATHCONV: "1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify openh264 machine type
