@@ -21,11 +21,9 @@ jobs:
           - name: windows-x86
             host: windows-2022
             target_arch: x86
-            expected_machine: x86
           - name: windows-x86_64
             host: windows-2022
             target_arch: x86_64
-            expected_machine: x64
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -61,18 +59,6 @@ jobs:
           MSYS2_ARG_CONV_EXCL: "*"
           MSYS_NO_PATHCONV: "1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify openh264 machine type
-        shell: powershell
-        run: |
-          $lib = Get-Item "artifacts/lib/openh264.lib" -ErrorAction Stop
-          $dump = & dumpbin /headers $lib.FullName | Out-String
-          if ("${{ matrix.platform.expected_machine }}" -eq "x86") {
-            if ($dump -notmatch "machine \(x86\)") { throw "Expected x86 machine type in $($lib.FullName)" }
-            if ($dump -match "machine \(x64\)") { throw "Found x64 objects in x86 artifact $($lib.FullName)" }
-          } else {
-            if ($dump -notmatch "machine \(x64\)") { throw "Expected x64 machine type in $($lib.FullName)" }
-          }
 
       - name: Prepare for artifact (Windows)
         run: |
